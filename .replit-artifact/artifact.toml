@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Zenovix Technologies"
+version = "1.0.0"
+id = "artifacts/zenovix-technologies"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25188
+
+[services.development]
+run = "pnpm --filter @workspace/zenovix-technologies run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/zenovix-technologies", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/zenovix-technologies/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25188"
+BASE_PATH = "/"
