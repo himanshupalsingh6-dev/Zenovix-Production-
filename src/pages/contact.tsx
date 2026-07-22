@@ -22,7 +22,8 @@ const formSchema = z.object({
 
 export default function Contact() {
   const { toast } = useToast();
-  const createSubmission = useCreateContactSubmission();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
