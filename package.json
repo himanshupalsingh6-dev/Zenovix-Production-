@@ -70,5 +70,8 @@
     "vite": "^7.0.6",
     "wouter": "^3.3.5",
     "zod": "^3.25.76"
+  },
+  "dependencies": {
+    "nodemailer": "^9.0.3"
   }
 }

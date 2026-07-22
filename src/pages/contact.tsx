@@ -33,11 +33,24 @@ export default function Contact() {
   });
 
   
-function onSubmit(values: z.infer<typeof formSchema>) {
+async function onSubmit(values: z.infer<typeof formSchema>) {
   setIsLoading(true);
 
-  setTimeout(() => {
-    setIsLoading(false);
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.error || "Failed to send");
+    }
+
     setIsSubmitted(true);
 
     toast({
@@ -46,10 +59,18 @@ function onSubmit(values: z.infer<typeof formSchema>) {
     });
 
     form.reset();
-  }, 1000);
+  } catch (err) {
+    toast({
+      title: "Submission Failed",
+      description: "Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsLoading(false);
+  }
 }
 
-  const inputCls = "w-full h-12 px-4 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all";
+const inputCls = "w-full h-12 px-4 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all";
 
   return (
     <div className="pb-24">
