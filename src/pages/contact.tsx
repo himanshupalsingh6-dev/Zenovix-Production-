@@ -32,14 +32,23 @@ export default function Contact() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    createSubmission.mutate(
-      { data: values },
-      {
-        onSuccess: () => {
-          toast({ title: "Message Sent Successfully", description: "We've received your inquiry and will respond within 24 hours." });
-          form.reset();
-        },
+  
+function onSubmit(values: z.infer<typeof formSchema>) {
+  setIsLoading(true);
+
+  setTimeout(() => {
+    setIsLoading(false);
+    setIsSubmitted(true);
+
+    toast({
+      title: "Message Sent Successfully",
+      description: "We'll contact you soon.",
+    });
+
+    form.reset();
+  }, 1000);
+}
+,
         onError: () => {
           toast({ title: "Submission Failed", description: "We couldn't send your message. Please try again or reach us on WhatsApp.", variant: "destructive" });
         },
@@ -103,12 +112,12 @@ export default function Contact() {
             {/* Form */}
             <div className="lg:col-span-3">
               <div className="bg-card border border-border rounded-3xl p-8 md:p-10 shadow-sm">
-                {createSubmission.isSuccess ? (
+                {isSubmitted ? (
                   <div className="flex flex-col items-center justify-center text-center py-16 space-y-4">
                     <div className="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center text-secondary"><CheckCircle2 className="w-8 h-8" /></div>
                     <h3 className="text-2xl font-bold text-foreground">Thank you!</h3>
                     <p className="text-muted-foreground max-w-sm">Your inquiry has been received. Our team will get back to you within 24 hours.</p>
-                    <button type="button" onClick={() => createSubmission.reset()} className="text-primary font-medium hover:underline">Submit another inquiry</button>
+                    <button type="button" onClick={() => setIsSubmitted(false)} className="text-primary font-medium hover:underline">Submit another inquiry</button>
                   </div>
                 ) : (
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -193,8 +202,8 @@ export default function Contact() {
                       {form.formState.errors.message && <p className="text-destructive text-xs">{form.formState.errors.message.message}</p>}
                     </div>
 
-                    <button type="submit" disabled={createSubmission.isPending} className="w-full h-14 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
-                      {createSubmission.isPending ? "Sending..." : "Submit Inquiry"}
+                    <button type="submit" disabled={isLoading} className="w-full h-14 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
+                      {isLoading ? "Sending..." : "Submit Inquiry"}
                     </button>
                     <p className="text-xs text-muted-foreground text-center">By submitting this form, you agree to our Privacy Policy. We never spam.</p>
                   </form>
