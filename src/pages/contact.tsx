@@ -48,13 +48,6 @@ function onSubmit(values: z.infer<typeof formSchema>) {
     form.reset();
   }, 1000);
 }
-,
-        onError: () => {
-          toast({ title: "Submission Failed", description: "We couldn't send your message. Please try again or reach us on WhatsApp.", variant: "destructive" });
-        },
-      },
-    );
-  }
 
   const inputCls = "w-full h-12 px-4 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all";
 
